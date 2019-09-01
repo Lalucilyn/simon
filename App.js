@@ -20,53 +20,69 @@ export default class App extends Component {
     this.setState({ fontLoaded: true });
   }
 
+  _startGame = () => {
+    this.setState({activeTile: 0, userArray: [], computerArray: []})
+    this._startTurn()
+  }
+
   _startTurn = () => {
-  let newOne = Math.floor(Math.random() * 4 + 1)
-  // let computerArray = [...this.state.computerArray]
-  // computerArray.push(newOne)
-  // this.setState({activeTile: newOne, computerArray: computerArray})
-  // console.log(this.computerArray)
-}
+    let newOne = Math.floor(Math.random() * 4 + 1)
+    let computerArray = [...this.state.computerArray]
+    this._playSound(newOne)
+    computerArray.push(newOne)
+    this.setState({activeTile: newOne, computerArray: computerArray})
+    setTimeout(() => {this.setState({activeTile: 0})}, 500)
+  }
 
+  _playSound = (number) => {
+    // let sounds = [
+    //   {id: 1, file: require('./assets/sounds/1.wav')}, 
+    //   {id: 2, file: require('./assets/sounds/2.wav')}, 
+    //   {id: 3, file: require('./assets/sounds/3.wav')},
+    //   {id: 4, file: require('./assets/sounds/4.wav')}
+    // ]
+    let sound = require('./assets/sounds/1.wav')
+    sound.play()
+  }
 
-  render() {
-    const something = [
+render() {
+    const tiles = [
     {
-    id: 1,
-    color: '#98DBC6',
-    hoverColor: '#79af9e',
-    content: '🌈'
+      id: 1,
+      color: '#98DBC6',
+      hoverColor: '#79af9e',
+      content: '🌈',
     },
     {
-    id: 2,
-    color: '#F18D9E',
-    hoverColor: '#c0707e',
-    content: '✨'
+      id: 2,
+      color: '#F18D9E',
+      hoverColor: '#c0707e',
+      content: '✨',
     },
     {
-    id: 3,
-    color: '#E6D72A',
-    hoverColor: '#b8ac21',
-    content: '🦄'
+      id: 3,
+      color: '#E6D72A',
+      hoverColor: '#b8ac21',
+      content: '🦄',
     },
     {
-    id: 4,
-    color: '#5BC8AC',
-    hoverColor: '#48a089',
-    content: '🌸'    
+      id: 4,
+      color: '#5BC8AC',
+      hoverColor: '#48a089',
+      content: '🌸',
     }
   ]
 
-  let conditional = this.state.fontLoaded ? (
+  let renderContentWhenFontLoads = this.state.fontLoaded ? (
       <LinearGradient colors={['#434343', '#000000']} style={styles.whole}>
         <Text style={styles.title}>🍰 Simon Time!! 🍓</Text>
         <View style={styles.container}>
-          {something.map(option => {
+          {tiles.map(tile => {
               return <Tile 
-                color={option.color} 
-                content={option.content} 
-                hoverColor={option.hoverColor}
-                active={option.id === this.state.activeTile}
+                color={tile.color} 
+                content={tile.content} 
+                hoverColor={tile.hoverColor}
+                active={tile.id === this.state.activeTile}
               />
             }
           )}
@@ -76,7 +92,8 @@ export default class App extends Component {
         </TouchableOpacity>
       </LinearGradient>
     ) : <View></View>
-    return conditional
+
+    return renderContentWhenFontLoads
   }
 }
 
